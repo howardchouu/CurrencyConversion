@@ -1,4 +1,4 @@
-TABLE CREATE calculate_record (
+ CREATE TABLE calculate_record (
     currency varchar(10),
     rate numeric(16,2),
     price numeric(16,2),
