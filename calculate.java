@@ -59,15 +59,15 @@ public class calculate extends HttpServlet {
 
 		try {
 			Class.forName("org.postgresql.Driver");
-			dbConnect = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", USER, PASS);
-			System.out.println("Opened database successfully");
+			dbConnect = DriverManager.getConnection("jdbc:postgresql://172.17.0.3:5432/postgres", USER, PASS);
+			//System.out.println("Opened database successfully");
 
 			// query
-			System.out.println("Creating statement...");
+			//System.out.println("Creating statement...");
 			dbStatement = dbConnect.createStatement();
 			String sql = "SELECT * FROM calculate_record";
 			ResultSet rs = dbStatement.executeQuery(sql);
-			System.out.println("Query success");
+			//System.out.println("Query success");
 			while (rs.next()) {
 
 				// Retrieve by column name
@@ -89,12 +89,12 @@ public class calculate extends HttpServlet {
 
 				// Display values
 				DecimalFormat df = new DecimalFormat("0.00");
-				System.out.println(currency);
+				/*System.out.println(currency);
 				System.out.println(df.format(rate));
 				System.out.println(df.format(price));
 				System.out.println(df.format(discount));
 				System.out.println(df.format(result));
-				System.out.println(record_time_s);
+				System.out.println(record_time_s);*/
 
 				// write response
 				jsonString = new JSONObject().put("result", "success").put("message", "")
@@ -103,7 +103,7 @@ public class calculate extends HttpServlet {
 										.put("price", df.format(price)).put("discount", df.format(discount))
 										.put("result", df.format(result)).put("record_time", record_time_s))
 						.toString();
-				System.out.println(jsonString);
+				//System.out.println(jsonString);
 				writer.write(jsonString);
 			}
 			rs.close();
@@ -142,7 +142,6 @@ public class calculate extends HttpServlet {
 		Float discount;
 		String currency;
 		Float usdTwd, usdJpy;
-		String usdTwdTime, useJpyTime;
 
 		// catch the data by json
 		StringBuffer stringBuffer = new StringBuffer();
@@ -183,8 +182,6 @@ public class calculate extends HttpServlet {
 			JSONObject usdJpySet = jsonObjectWeb.getJSONObject("USDJPY");
 			usdTwd = usdTwdSet.getFloat("Exrate");
 			usdJpy = usdJpySet.getFloat("Exrate");
-			usdTwdTime = usdTwdSet.getString("UTC");
-			useJpyTime = usdJpySet.getString("UTC");
 		} catch (Exception e) {
 			throw new IOException("Error to access the website");
 		}
@@ -211,7 +208,7 @@ public class calculate extends HttpServlet {
 		String jsonString = new JSONObject().put("result", Float.parseFloat(df.format(result)))
 				.put("discount", Float.parseFloat(df.format(discount))).put("price", Float.parseFloat(df.format(price)))
 				.put("rate", Float.parseFloat(df.format(rate))).put("currency", currency).toString();
-		System.out.println(jsonString);
+		//System.out.println(jsonString);
 		writer.write(jsonString);
 
 		// insert to SQL
@@ -224,15 +221,15 @@ public class calculate extends HttpServlet {
 
 		try {
 			Class.forName("org.postgresql.Driver");
-			dbConnect = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", USER, PASS);
+			dbConnect = DriverManager.getConnection("jdbc:postgresql://172.17.0.3:5432/postgres", USER, PASS);
 			// query
-			System.out.println("Creating statement...");
+			//System.out.println("Creating statement...");
 			dbStatement = dbConnect.createStatement();
 			String sql = "INSERT INTO calculate_record VALUES ( \'" + currency + "\' , " + df.format(rate) + " , "
 					+ df.format(price) + " , " + df.format(discount) + " , " + df.format(result) + ")";
-			System.out.println(sql);
+			//System.out.println(sql);
 			dbStatement.executeUpdate(sql);
-			System.out.println("Query success");
+			//System.out.println("Query success");
 			dbConnect.close();
 			dbStatement.close();
 		} catch (Exception e) {
