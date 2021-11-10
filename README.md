@@ -9,6 +9,7 @@ Demo link : http://ec2-18-117-182-46.us-east-2.compute.amazonaws.com:8080
 * JavaSE 11
 * deploy on Amazon AWS EC2
 * Used Docker Container
+* Postgres v13
 
 ## Build & Installation
 
